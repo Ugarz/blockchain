@@ -1,4 +1,5 @@
-const SHA256 = require('crypto-js/SHA256');
+// const SHA256 = require('crypto-js/SHA256');
+const crypto = require('crypto');
 
 class Block {
     /**
@@ -19,8 +20,14 @@ class Block {
     /**
      * calculateHash the hash based on the previous hash
      */
-    calculateHash(){
-        return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data).toString());
+    calculateHash() {
+      // const secret = 'abcdefg';
+      const secret = this.index + this.previousHash + this.timestamp + JSON.stringify(this.data).toString();
+      const hash = crypto.createHmac('sha256', secret).digest('hex');
+      return hash;
+      // const secret = this.index + this.previousHash + this.timestamp + JSON.stringify(this.data).toString();
+      // console.log('secret', secret)
+      // return SHA256(secret);
     }
 }
 
@@ -28,21 +35,32 @@ class Block {
  * Our blockhain
  */
 class Blockchain {
+  /**
+   * The Blockchain 
+   */
   constructor() {
     this.chain = [this.createGenesisBlock()];
   }
-
+  /**
+   * Create the first Block in the Blockchain
+   */
   createGenesisBlock() {
-    return new Block(0, "30/05/2018", "Genesis Block", "0");
+    return new Block(0, "01/01/2017", "Genesis block", "0");
   }
 
+  /**
+   * Get the lastest Block in the Blockchain
+   */
   get latestBlock() {
     return this.chain[this.chain.length - 1];
   }
 
   addBlock(newBlock) {
+    // Stock previousBlockHash in currentBlock
     newBlock.previousHash = this.latestBlock.hash;
+    // Calculate hash for the new Block
     newBlock.hash = newBlock.calculateHash();
+    // Puch the new Block in our Blockchain
     this.chain.push(newBlock);
   }
 
@@ -52,13 +70,14 @@ class Blockchain {
    * @returns
    * @memberof Blockchain
    */
-  ifChainValid() {
+  isChainValid() {
     for (let index = 1; index < this.chain.length; index++) {
       const currentBlock = this.chain[index];
       const previousBlock = this.chain[index - 1];
     
       if (currentBlock.hash !== currentBlock.calculateHash()) {
-          console.log("The hash of the current block is not equal to the previous one", {currentBlock});
+        const obj = { currentHash: currentBlock.hash, calc: currentBlock.calculateHash() }
+          console.log("The hash of the current block is not equal to the previous one", JSON.stringify(obj, null, 2));
           return false;
         }
         if(currentBlock.previousHash !== previousBlock.hash){
@@ -74,6 +93,11 @@ let ucoin = new Blockchain()
 ucoin.addBlock(new Block(1, new Date(), {amount: 10, label: 'groceries'}))
 ucoin.addBlock(new Block(2, new Date(), {amount: 30, label: 'udemy course'}))
 
-console.log("Is Blockchain Valid ?", ucoin.ifChainValid());
+console.log("Is Blockchain Valid ?", ucoin.isChainValid());
 
-//console.log('Blockhain', JSON.stringify(ucoin, null, 4))
+console.log("Changing a block...");
+ucoin.chain[1].data = { amount: 100 };
+
+console.log("Blockchain valid? " + ucoin.isChainValid());
+
+//console.log('Full Blockhain', JSON.stringify(ucoin, null, 4))
