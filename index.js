@@ -4,8 +4,12 @@ let ucoin = new Blockchain()
 
 console.log('Mining block 1');
 ucoin.addBlock(new Block(1, new Date(), { type: 'INCOME', amount: 10, label: 'groceries' }))
+
 console.log('Mining block 2');
 ucoin.addBlock(new Block(2, new Date(), { type: 'OUTCOME', amount: 30, label: 'udemy course' }))
+
+console.log('Mining block 3');
+ucoin.addBlock(new Block(3, new Date(), { type: 'OUTCOME', amount: 130, label: 'withdraw' }))
 
 
 // console.log('Full Blockhain', JSON.stringify(ucoin, null, 4))

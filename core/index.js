@@ -1,40 +1,44 @@
 const crypto = require('crypto');
 
 class Block {
-    /**
-     * Block parameters
-     * @param {*} index Tells where the block is on the chain
-     * @param {*} timestamp Tells when the block was created
-     * @param {ojbect} data The data to associate with the block
-     * @param {string} previousHash The previous hash (important, ensure integrity)
-     */
-    constructor(index, timestamp, data, previousHash = '') {
-        this.index = index;
-        this.timestamp = timestamp;
-        this.data = data;
-        this.previousHash = previousHash;
-        this.hash = this.calculateHash();
-        this.nounce = 0;
-    }
+  /**
+   * Block parameters
+   * @param {integer} index Tells where the block is on the chain
+   * @param {string} timestamp Tells when the block was created
+   * @param {ojbect} data The data to associate with the block
+   * @param {string} previousHash The previous hash (important, ensure integrity)
+   */
+  constructor(index, timestamp, data, previousHash = "") {
+    this.index = index;
+    this.timestamp = timestamp;
+    this.data = data;
+    this.previousHash = previousHash;
+    this.hash = this.calculateHash();
+    this.nounce = 0;
+  }
 
-    /**
-     * calculateHash the hash based on the previous hash
-     */
-    calculateHash() {
-        const secret = (this.index + this.previousHash + this.timestamp + JSON.stringify(this.data) + this.nounce).toString();
-        const hash = crypto.createHmac('sha256', secret).digest('hex');
-        return hash;
+  /**
+   * calculateHash the hash based on the previous hash
+   */
+  calculateHash() {
+    const secret = (this.index + this.previousHash + this.timestamp + JSON.stringify(this.data) + this.nounce).toString();
+    const hash = crypto.createHmac("sha256", secret).digest("hex");
+    return hash;
+  }
+  
+  /**
+   * Mine a block
+   * @param {integer} The difficulty to mine a Block
+   */
+  mineBlock(difficulty) {
+    const challenge = this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")
+    console.log('challenge', challenge)
+    while (challenge) {
+      this.nonce++;
+      this.hash = this.calculateHash();
     }
-
-    mineBlock(difficulty) {
-        console.log(this.hash.substring(0, difficulty));
-        console.log(Array(difficulty + 1).join("0"));
-        while(this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")) {
-            this.nonce++;
-            this.hash = this.calculateHash();
-        }
-        console.log(`Block mined: ${this.hash}`)
-    }
+    console.log("BLOCK MINED: " + this.hash);
+  }
 }
 
 /**
