@@ -14,19 +14,26 @@ class Block {
         this.data = data;
         this.previousHash = previousHash;
         this.hash = this.calculateHash();
+        this.nounce = 0;
     }
 
     /**
      * calculateHash the hash based on the previous hash
      */
     calculateHash() {
-        // const secret = 'abcdefg';
-        const secret = this.index + this.previousHash + this.timestamp + JSON.stringify(this.data).toString();
+        const secret = (this.index + this.previousHash + this.timestamp + JSON.stringify(this.data) + this.nounce).toString();
         const hash = crypto.createHmac('sha256', secret).digest('hex');
         return hash;
-        // const secret = this.index + this.previousHash + this.timestamp + JSON.stringify(this.data).toString();
-        // console.log('secret', secret)
-        // return SHA256(secret);
+    }
+
+    mineBlock(difficulty) {
+        console.log(this.hash.substring(0, difficulty));
+        console.log(Array(difficulty + 1).join("0"));
+        while(this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")) {
+            this.nonce++;
+            this.hash = this.calculateHash();
+        }
+        console.log(`Block mined: ${this.hash}`)
     }
 }
 
@@ -39,6 +46,7 @@ class Blockchain {
      */
     constructor() {
         this.chain = [this.createGenesisBlock()];
+        this.difficulty = 2;
     }
     /**
      * Create the first Block in the Blockchain
@@ -58,7 +66,8 @@ class Blockchain {
         // Stock previousBlockHash in currentBlock
         newBlock.previousHash = this.latestBlock.hash;
         // Calculate hash for the new Block
-        newBlock.hash = newBlock.calculateHash();
+        // newBlock.hash = newBlock.calculateHash();
+        newBlock.mineBlock(this.difficulty);
         // Puch the new Block in our Blockchain
         this.chain.push(newBlock);
     }
