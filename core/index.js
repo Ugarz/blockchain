@@ -13,12 +13,14 @@ class Block {
     this.timestamp = timestamp;
     this.data = data;
     this.previousHash = previousHash;
-    this.hash = this.calculateHash();
     this.nounce = 0;
+    this.hash = this.calculateHash();
+    this.report = 0;
   }
 
   /**
    * calculateHash the hash based on the previous hash
+   * @return {string} Return the hash
    */
   calculateHash() {
     const secret = (this.index + this.previousHash + this.timestamp + JSON.stringify(this.data) + this.nounce).toString();
@@ -31,13 +33,19 @@ class Block {
    * @param {integer} The difficulty to mine a Block
    */
   mineBlock(difficulty) {
-    const challenge = this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")
-    console.log('challenge', challenge)
+    let challenge = this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")
+    console.log('Passing challenge..')
+    
     while (challenge) {
-      this.nonce++;
+      this.nounce++;
+      this.report++;
       this.hash = this.calculateHash();
+      challenge = this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0");
+    //   console.log('hash', this.hash);
     }
-    console.log("BLOCK MINED: " + this.hash);
+    
+    console.log(`ATTEMPTS: ${this.report}`);
+    console.log(`BLOCK MINED: ${this.hash}`);
   }
 }
 
@@ -50,13 +58,13 @@ class Blockchain {
      */
     constructor() {
         this.chain = [this.createGenesisBlock()];
-        this.difficulty = 2;
+        this.difficulty = 5;
     }
     /**
      * Create the first Block in the Blockchain
      */
     createGenesisBlock() {
-        return new Block(0, "01/01/2017", "Genesis block", "0");
+        return new Block(0, "31/04/2018", { title: "Genesis block" }, "0");
     }
 
     /**
@@ -65,21 +73,26 @@ class Blockchain {
     get latestBlock() {
         return this.chain[this.chain.length - 1];
     }
-
+    
     addBlock(newBlock) {
+        console.log('Adding a Block to the Blockchain...');
         // Stock previousBlockHash in currentBlock
         newBlock.previousHash = this.latestBlock.hash;
+        
         // Calculate hash for the new Block
         // newBlock.hash = newBlock.calculateHash();
+
+        // Mine a Bloack according a given difficulty
         newBlock.mineBlock(this.difficulty);
-        // Puch the new Block in our Blockchain
+
+        // Push the new Block in our Blockchain
         this.chain.push(newBlock);
     }
 
     /**
      *
      * Check if the blockchain is valid
-     * @returns
+     * @returns {boolean} Returns true or false for a Blockchain status
      * @memberof Blockchain
      */
     isChainValid() {
