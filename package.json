@@ -25,6 +25,7 @@
   "devDependencies": {
     "jsdoc": "^3.5.5",
     "minami": "^1.2.3",
+    "mocha": "^5.2.0",
     "nodemon": "^1.17.5",
     "serve": "^10.0.2"
   }
