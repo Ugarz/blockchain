@@ -19,7 +19,8 @@
   "author": "ugo.arzur@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "crypto": "^1.0.1"
+    "crypto": "^1.0.1",
+    "signale": "^1.3.0"
   },
   "devDependencies": {
     "jsdoc": "^3.5.5",

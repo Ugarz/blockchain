@@ -1,11 +1,12 @@
 const crypto = require('crypto');
+const signale = require('signale');
 
 class Block {
     /**
      * Block parameters
-     * @param {*} index Tells where the block is on the chain
-     * @param {*} timestamp Tells when the block was created
-     * @param {ojbect} data The data to associate with the block
+     * @param {integer} index Tells where the block is on the chain
+     * @param {string} timestamp Tells when the block was created
+     * @param {Object} data The data to associate with the block
      * @param {string} previousHash The previous hash (important, ensure integrity)
      */
     constructor(index, timestamp, data, previousHash = '') {
@@ -21,8 +22,10 @@ class Block {
      */
     calculateHash() {
         // const secret = 'abcdefg';
+        signale.info('|> Calculating hash..')
         const secret = this.index + this.previousHash + this.timestamp + JSON.stringify(this.data).toString();
         const hash = crypto.createHmac('sha256', secret).digest('hex');
+        signale.success('|> hash', hash)
         return hash;
         // const secret = this.index + this.previousHash + this.timestamp + JSON.stringify(this.data).toString();
         // console.log('secret', secret)
@@ -49,6 +52,7 @@ class Blockchain {
 
     /**
      * Get the lastest Block in the Blockchain
+     * @returns {array} lastBlock - Return the last block
      */
     get latestBlock() {
         return this.chain[this.chain.length - 1];
@@ -66,7 +70,7 @@ class Blockchain {
     /**
      *
      * Check if the blockchain is valid
-     * @returns {boolean} true||false - The result if the chain is valid
+     * @returns {boolean} isBlockchainValid - The result if the chain is valid
      * @memberof Blockchain
      */
     isChainValid() {
