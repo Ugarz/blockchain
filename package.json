@@ -4,9 +4,11 @@
   "description": "Create a simple blockchain to learn and test some concepts with javascript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "./node_modules/.bin/nodemon index.js"
+    "dev": "./node_modules/.bin/nodemon index.js",
+    "build:doc": "./node_modules/.bin/jsdoc core/index.js -t assets/template/minami",
+    "serve:doc": "./node_modules/.bin/serve out/",
+    "doc": "npm run build:doc && npm run serve:doc"
   },
   "keywords": [
     "blockchain",
@@ -20,6 +22,9 @@
     "crypto": "^1.0.1"
   },
   "devDependencies": {
-    "nodemon": "^1.17.5"
+    "jsdoc": "^3.5.5",
+    "minami": "^1.2.3",
+    "nodemon": "^1.17.5",
+    "serve": "^10.0.2"
   }
 }
