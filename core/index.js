@@ -66,7 +66,7 @@ class Blockchain {
     /**
      *
      * Check if the blockchain is valid
-     * @returns
+     * @returns {boolean} true||false - The result if the chain is valid
      * @memberof Blockchain
      */
     isChainValid() {
