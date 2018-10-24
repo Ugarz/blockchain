@@ -113,7 +113,7 @@ class Blockchain {
 
             if (currentBlock.hash !== currentBlock.calculateHash()) {
                 const obj = { currentHash: currentBlock.hash, calc: currentBlock.calculateHash() }
-                console.log("The hash of the current block is not equal to the previous one", JSON.stringify(obj, null, 2));
+                signale.error("The hash of the current block is not equal to the previous one", JSON.stringify(obj, null, 2));
                 return false;
             }
             if (currentBlock.previousHash !== previousBlock.hash) {
