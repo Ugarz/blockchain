@@ -1,5 +1,13 @@
+/**
+ * Global dependencies
+ */
 const crypto = require('crypto');
 const signale = require('signale');
+
+/**
+ * Local dependencies
+ */
+const { isRequired } = require('./helpers/validation')
 
 /**
  * The Block Class
@@ -29,7 +37,7 @@ class Block {
         signale.info('|> Calculating hash..')
         const secret = this.index + this.previousHash + this.timestamp + JSON.stringify(this.data).toString();
         const hash = crypto.createHmac('sha256', secret).digest('hex');
-        signale.success('|> hash', hash)
+        signale.success('|> hash found')
         return hash;
     }
     /**
@@ -38,7 +46,7 @@ class Block {
      * @memberof Block
      */
     mine(){
-        console.log('Start mining..');
+        signale.info('Start mining..');
 
         const mine = (time = 3000) => new Promise((rej,res) => {
             
@@ -63,11 +71,11 @@ class Blockchain {
     }
     /**
      * Create the first Block in the Blockchain
-     * @returns {Object} firstBlock - The first Block
+     * @returns {Object} firstBlock - The first Block ofr the Blockchain
      * @memberof Blockchain
      */
     createGenesisBlock() {
-        return new Block(0, "01/01/2017", "Genesis block", "0");
+        return new Block(0, "2017-01-01", "Genesis block", "0");
     }
 
     /**
@@ -89,12 +97,11 @@ class Blockchain {
         newBlock.previousHash = this.latestBlock.hash;
         // Calculate hash for the new Block
         newBlock.hash = newBlock.calculateHash();
-        // Puch the new Block in our Blockchain
+        // Push the new Block in our Blockchain
         this.chain.push(newBlock);
     }
 
     /**
-     *
      * Check if the blockchain is valid
      * @returns {boolean} isBlockchainValid - The result if the chain is valid
      * @memberof Blockchain
