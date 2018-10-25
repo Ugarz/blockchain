@@ -1,6 +1,6 @@
 {
   "name": "blockchain",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Create a simple blockchain to learn and test some concepts with javascript",
   "main": "index.js",
   "scripts": {
