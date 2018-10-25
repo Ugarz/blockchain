@@ -11,6 +11,15 @@ const { isRequired } = require('./helpers/validation')
 
 /**
  * The Block Class
+ * @example
+ * const { Blockchain, Block } = require('blockchain')
+ * const myNewBlockchain = new Blockchain()
+ * const transactionData = {
+        type: 'INCOME',
+        amount: 10,
+        label: 'groceries'
+    }
+ * myNewBlockchain.addBlock(new Block(1, '2018-10-25', transactionData))
  */
 class Block {
     /**
@@ -28,10 +37,12 @@ class Block {
         this.previousHash = previousHash;
         this.hash = this.calculateHash();
     }
-
+    
     /**
      * calculateHash the hash based on the previous hash
      * @memberof Block
+     * @private
+     * @instance
      */
     calculateHash() {
         signale.info('|> Calculating hash..')
@@ -70,27 +81,42 @@ class Blockchain {
         this.chain = [this.createGenesisBlock()];
     }
     /**
-     * Create the first Block in the Blockchain
+     * createGenesisBlock
+     * @description Called for the first time on Blockchain creation
      * @returns {Object} firstBlock - The first Block ofr the Blockchain
      * @memberof Blockchain
+     * @private
      */
     createGenesisBlock() {
         return new Block(0, "2017-01-01", "Genesis block", "0");
     }
 
     /**
-     * Get the lastest Block in the Blockchain
+     * latestBlock
+     * @description Get the lastest Block in the Blockchain
      * @returns {array} lastBlock - Return the last block
      * @memberof Blockchain
+     * @example
+     * const latestBlock = Blockchain.latestBlock;
      */
     get latestBlock() {
         return this.chain[this.chain.length - 1];
     }
 
     /**
-     * Add a new Block to the Blockchain
+     * addBlock
+     * @description Add a new Block to the Blockchain
      * @param {Object} newBlock - Add a new Block 
      * @memberof Blockchain
+     * @example
+     * const { Blockchain, Block } = require('blockchain')
+     * const myNewBlockchain = new Blockchain()
+     * const transactionData = {
+             type: 'INCOME',
+             amount: 10,
+             label: 'groceries'
+         }
+     * myNewBlockchain.addBlock(new Block(1, '2018-10-25', transactionData))
      */
     addBlock(newBlock) {
         // Stock previousBlockHash in currentBlock
@@ -102,9 +128,11 @@ class Blockchain {
     }
 
     /**
-     * Check if the blockchain is valid
+     * @description Check if the blockchain is valid
      * @returns {boolean} isBlockchainValid - The result if the chain is valid
      * @memberof Blockchain
+     * @example
+     * const result = blockchain.isChainValid();
      */
     isChainValid() {
         for (let index = 1; index < this.chain.length; index++) {
