@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/Ugarz/blockchain.svg?branch=master)](https://travis-ci.org/Ugarz/blockchain)
 # Create a blockchain with Javascript
 The idea behind this is to learn more on how to create a Blockchain.
 
