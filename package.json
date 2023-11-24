@@ -1,22 +1,21 @@
 {
   "name": "blockchain",
   "version": "0.0.1",
-  "description": "Create a simple blockchain to learn and test some concepts with javascript",
-  "main": "index.js",
+  "description": "Create a simple blockchain to learn and test some concepts with typescript.",
+  "main": "dist/blockchain.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --opts ./tests/mocha.opts './tests/**/*.spec.js'",
-    "test:watch": "./node_modules/.bin/mocha -w --opts ./tests/mocha.opts './tests/**/*.spec.js'",
-    "start": "node index.js",
-    "dev": "./node_modules/.bin/nodemon index.js",
-    "build:doc": "./node_modules/.bin/jsdoc core/index.js -t assets/template/minami",
-    "serve:doc": "./node_modules/.bin/serve out/",
-    "doc": "npm run build:doc && npm run serve:doc"
+    "test": "./node_modules/.bin/mocha --require ts-node/register './tests/**/*.spec.ts'",
+    "test:watch": "./node_modules/.bin/mocha -w --require ts-node/register './tests/**/*.spec.ts'",
+    "build": "tsc",
+    "start": "node dist/blockchain.js",
+    "dev": "./node_modules/.bin/ts-node src/blockchain.ts"
   },
   "keywords": [
     "blockchain",
     "javascript",
+    "typescript",
     "js",
-    "blockchain-technology"
+    "ts"
   ],
   "author": "ugo.arzur@gmail.com",
   "license": "MIT",
@@ -25,11 +24,13 @@
     "signale": "^1.4.0"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "jsdoc": "^3.6.3",
-    "minami": "^1.2.3",
-    "mocha": "^6.2.0",
-    "nodemon": "^1.19.2",
-    "serve": "^10.1.2"
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.0",
+    "@types/signale": "^1.4.7",
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
   }
 }
